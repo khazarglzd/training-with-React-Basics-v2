@@ -1,63 +1,55 @@
 import React from "react";
 import MovieList from "./MovieList";
 import SearchBar from "./SearchBar";
+import axios from "axios";
 
 class App extends React.Component {
   state = {
-    movies: [
-      {
-        name: "The Matrix 3",
-        rating: 8.1,
-        overview:
-          "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w600_and_h900_bestv2/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
-        id: 1,
-      },
-      {
-        name: "Blitz 007",
-        rating: 7.4,
-        overview:
-          "British thriller film directed by Elliott Lester and starring Jason Statham.The narrative follows a violent police officer trying to catch a serial killer who has been murdering police officers in South East London.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qCPMjT8Ld8tvs1zs7LY2jpKlRIK.jpg",
-        id: 2,
-      },
-      {
-        name: "Hostage",
-        rating: 6.3,
-        imageURL:
-          "https://image.tmdb.org/t/p/w600_and_h900_bestv2/4hne3v6jN4MlCnhSkxOW7YspJhr.jpg",
-        overview:
-          "When a mafia accountant is taken hostage on his beat, a police officer – wracked by guilt from a prior stint as a negotiator – must negotiate the standoff, even as his own family is held captive by the mob.",
-        id: 3,
-      },
-      {
-        name: "Saw 3D",
-        rating: 7.5,
-        overview:
-          "SAW legacy, a group of Jigsaw survivors gathers to seek the support of self-help guru and fellow survivor Bobby Dagen, a man whose own dark secrets unleash a new wave of terror.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qHCZ6LjtmqWDfXXN28TlIC9OppK.jpg",
-        id: 4,
-      },
-      {
-        name: "The Matrix Reloaded",
-        rating: 6.9,
-        imageURL:
-          "https://image.tmdb.org/t/p/w600_and_h900_bestv2/jBegA6V243J6HUnpcOILsRvBnGb.jpg",
-        overview:
-          "Neo has proved to be a good omen for the free humans, as more and more humans brought to Zion, the one and only Resistance. Neo himself has discovered his superpowers including super speed.",
-        id: 5,
-      },
-    ],
+    movies: [],
 
     searchQuery: "",
   };
 
-  deleteMovie = (movie) => {
-    const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
+  // async componentDidMount() {
+  //   const baseUrl = "http://localhost:3002/movies";
+  //   const response = await fetch(baseUrl);
+  //   console.log(response);
+  //   const data = await response.json();
+  //   console.log(data);
+  //   this.setState({ movies: data });
+  // }
 
+  async componentDidMount() {
+    const response = await axios.get("http://localhost:3002/movies");
+    console.log(response);
+    this.setState({ movies: response.data });
+  }
+
+  //STATIC
+  // deleteMovie = (movie) => {
+  //   const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
+
+  //   this.setState((state) => ({
+  //     movies: newMovieList,
+  //   }));
+  // };
+
+  //Fetch API
+  // deleteMovie = async (movie) => {
+  //   const baseUrl = `http://localhost:3002/movies/${movie.id}`;
+  //   await fetch(baseUrl, { method: "DELETE" });
+
+  //   const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
+
+  //   this.setState((state) => ({
+  //     movies: newMovieList,
+  //   }));
+  // };
+
+  //Axios API
+  deleteMovie = async (movie) => {
+    axios.delete(`http://localhost:3002/movies/${movie.id}`);
+    const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
     this.setState((state) => ({
       movies: newMovieList,
     }));
